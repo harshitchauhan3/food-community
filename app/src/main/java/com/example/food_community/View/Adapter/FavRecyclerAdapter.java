@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.food_community.Models.Meals;
 import com.example.food_community.R;
 import com.squareup.picasso.Picasso;
 
@@ -19,33 +20,33 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class RecyclerViewMealByCategory extends RecyclerView.Adapter<RecyclerViewMealByCategory.RecyclerViewHolder> {
+public class FavRecyclerAdapter extends RecyclerView.Adapter<FavRecyclerAdapter.favViewHolder> {
 
-    private List<com.example.food_community.Models.Meals.Meal> meals;
+    private List<Meals.Meal> meals;
     private Context context;
     private static ClickListener clickListener;
 
-    public RecyclerViewMealByCategory(Context context, List<com.example.food_community.Models.Meals.Meal> meals) {
+    public FavRecyclerAdapter(Context context, List<com.example.food_community.Models.Meals.Meal> meals) {
         this.meals = meals;
         this.context = context;
     }
 
     @NotNull
     @Override
-    public RecyclerViewMealByCategory.RecyclerViewHolder onCreateViewHolder(@NotNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_recycler_meal,
+    public FavRecyclerAdapter.favViewHolder onCreateViewHolder(@NotNull ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(context).inflate(R.layout.item_fav_meal,
                 viewGroup, false);
-        return new RecyclerViewHolder(view);
+        return new favViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NotNull RecyclerViewMealByCategory.RecyclerViewHolder viewHolder, int i) {
+    public void onBindViewHolder(@NotNull FavRecyclerAdapter.favViewHolder viewHolder, int i) {
 
         String strMealThumb = meals.get(i).getStrMealThumb();
-        Picasso.get().load(strMealThumb).placeholder(R.drawable.shadow_bottom_to_top).into(viewHolder.mealThumb);
+        Picasso.get().load(strMealThumb).placeholder(R.drawable.shadow_bottom_to_top).into(viewHolder.favMealThumb);
 
         String strMealName = meals.get(i).getStrMeal();
-        viewHolder.mealName.setText(strMealName);
+        viewHolder.favMealName.setText(strMealName);
     }
 
 
@@ -54,12 +55,12 @@ public class RecyclerViewMealByCategory extends RecyclerView.Adapter<RecyclerVie
         return meals.size();
     }
 
-    static class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @BindView(R.id.mealThumb)
-        ImageView mealThumb;
-        @BindView(R.id.mealName)
-        TextView mealName;
-        RecyclerViewHolder(@NotNull View itemView) {
+    static class favViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        @BindView(R.id.favMealThumb)
+        ImageView favMealThumb;
+        @BindView(R.id.favMealName)
+        TextView favMealName;
+        favViewHolder(@NotNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
@@ -73,7 +74,7 @@ public class RecyclerViewMealByCategory extends RecyclerView.Adapter<RecyclerVie
 
 
     public void setOnItemClickListener(ClickListener clickListener) {
-        RecyclerViewMealByCategory.clickListener = clickListener;
+        FavRecyclerAdapter.clickListener = clickListener;
     }
 
 

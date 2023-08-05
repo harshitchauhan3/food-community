@@ -11,11 +11,10 @@ public class Utils {
         return Client.getFoodClient().create(FoodAPI.class);
     }
 
-    public static AlertDialog showDialogMessage(Context context, String title, String message) {
+    public static void showDialogMessage(Context context, String title, String message) {
         AlertDialog alertDialog = new AlertDialog.Builder(context).setTitle(title).setMessage(message).show();
         if (alertDialog.isShowing()) {
             alertDialog.cancel();
         }
-        return alertDialog;
     }
 }

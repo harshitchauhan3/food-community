@@ -11,12 +11,13 @@ import retrofit2.Response;
 
 public class DetailPresenter {
     private DetailView view;
+    private Meals.Meal meal;
 
     public DetailPresenter(DetailView view) {
         this.view = view;
     }
 
-    void getMealById(String mealName) {
+    void getMealByName(String mealName) {
         view.showLoading();
         Utils.getApi().getMealByName(mealName)
                 .enqueue(new Callback<Meals>() {
@@ -25,6 +26,7 @@ public class DetailPresenter {
                         view.hideLoading();
                         if(response.isSuccessful() && response.body() != null){
                             view.setMeal(response.body().getMeals().get(0));
+                            meal=response.body().getMeals().get(0);
                         }
                         else{
                             view.onErrorLoading(response.message());
@@ -37,6 +39,9 @@ public class DetailPresenter {
                         view.onErrorLoading(t.getLocalizedMessage());
                     }
                 });
+    }
+    public Meals.Meal getMeal() {
+        return meal;
     }
 }
 

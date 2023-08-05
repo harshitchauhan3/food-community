@@ -2,15 +2,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.food_community">
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_food_svgrepo_com"
         android:label="@string/app_name"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:targetApi="31">
         <activity
-            android:name=".HomeActivity"
+            android:name=".profile"
+            android:exported="false" />
+        <activity
+            android:name=".favorite"
             android:exported="false" />
         <activity
             android:name=".View.detail.DetailActivity"
@@ -33,10 +37,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".settings"
-            android:exported="false"
-            android:label="@string/title_activity_settings" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -54,7 +54,7 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="false"/>
+            android:exported="false" />
     </application>
 
 </manifest>

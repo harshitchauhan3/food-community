@@ -18,13 +18,14 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:title="@string/category"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabIndicatorHeight="3dp"
-            app:tabIndicatorColor="@color/teal_700"
+            app:tabIndicatorColor="@color/purple_500"
             app:tabMode="scrollable"
             app:tabContentStart="85dp"/>
     </com.google.android.material.appbar.AppBarLayout>

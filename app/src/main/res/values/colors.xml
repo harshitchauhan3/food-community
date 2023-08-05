@@ -11,8 +11,10 @@
     <color name="colorPrimaryDark">#044A07</color>
     <color name="colorAccent">#C4E1A2</color>
     <color name="colorCardPrimary">#eeeeee</color>
-    <color name="colorBackground">#ffeeee</color>
+    <color name="colorBackground">#ECAF9B</color>
     <color name="colorCardPrimaryText">#111111</color>
     <color name="colorCardBottomText">#222222</color>
-    <color name="shimmer_view">#DFDFDF</color>
+    <color name="shimmer_view">#A4CBEA</color>
+    <color name="light_green">#BBFF91</color>
+    <color name="dark_blue">#12396A</color>
 </resources>

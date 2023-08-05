@@ -16,8 +16,11 @@ public class Meals {
         this.meals = meals;
     }
 
-    public class Meal {
+    public static class Meal {
 
+        public Meal() {
+            // Empty constructor required by Firebase Realtime Database.
+        }
         @SerializedName("idMeal")
         @Expose
         private String idMeal;
@@ -171,6 +174,8 @@ public class Meals {
         @SerializedName("dateModified")
         @Expose
         private Object dateModified;
+
+        // Getters and Setters
 
         public String getIdMeal() {
             return idMeal;

@@ -6,33 +6,47 @@
     android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/dark_blue"
     android:padding="15dp"
+    app:layout_marginBaseline="@dimen/activity_vertical_margin"
     tools:context=".login">
 
     <TextView
-        android:text="Register"
+        android:text="@string/register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/light_green"
+        android:textColor="@color/dark_blue"
+        android:textStyle="italic|bold"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:layout_marginBottom="40dp" />
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/email_input"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="25sp"
-        android:layout_marginBottom="20dp" />
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:background="@color/light_green"
+        android:layout_marginBottom="10dp">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/email"
-            android:hint="email"
+            android:hint="@string/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/password_input"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/light_green">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/password"
-            android:hint="password"
+            android:hint="@string/password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             />
@@ -45,17 +59,27 @@
         android:layout_height="wrap_content"/>
     <Button
         android:id="@+id/reg_button"
-        android:text="register"
+        android:text="@string/register"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/light_green"
+        android:textColor="@color/dark_blue"
+        android:textSize="16sp"
+        android:layout_marginTop="20dp">
     </Button>
     <TextView
         android:id="@+id/login_now"
-        android:text="Login Now"
+        android:text="@string/login_now"
         android:textStyle="bold"
         android:textSize="20sp"
         android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:layout_width="match_parent"
+        android:background="@color/light_green"
+        android:textColor="@color/dark_blue"
+        android:layout_marginTop="90dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 </LinearLayout>

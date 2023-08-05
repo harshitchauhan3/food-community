@@ -1,32 +1,48 @@
 package com.example.food_community.View.detail;
 
+import static com.example.food_community.MainActivity.EXTRA_DETAIL;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.ViewCompat;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.Menu;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.food_community.Models.Meals;
 import com.example.food_community.R;
 import com.example.food_community.Utils.Utils;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.HashMap;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity implements DetailView{
+
+    private Meals.Meal curr_meal;
+    private boolean isMealInFavorites = false;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -36,6 +52,9 @@ public class DetailActivity extends AppCompatActivity implements DetailView{
 
     @BindView(R.id.collapsing_toolbar)
     CollapsingToolbarLayout collapsingToolbarLayout;
+
+    @BindView(R.id.fav_press)
+    ImageView favIcon;
 
     @BindView(R.id.mealThumb)
     ImageView mealThumb;
@@ -72,60 +91,81 @@ public class DetailActivity extends AppCompatActivity implements DetailView{
         setupActionBar();
 
         Intent intent = getIntent();
-        String mealName = intent.getStringExtra("detail");
+        String mealName = intent.getStringExtra(EXTRA_DETAIL);
         DetailPresenter presenter = new DetailPresenter(this);
-        presenter.getMealById(mealName);
+        presenter.getMealByName(mealName);
+
+        favIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+                if(firebaseAuth.getCurrentUser()==null){
+                    Toast.makeText(DetailActivity.this,"You are not logged in",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    if (isMealInFavorites) {
+                        removeFromFav(DetailActivity.this, curr_meal);
+                        favIcon.setImageResource(R.drawable.ic_favorite_border);
+                        isMealInFavorites = false; // Update the variable
+                    } else {
+                        addToFav(DetailActivity.this, curr_meal);
+                        favIcon.setImageResource(R.drawable.ic_favorite_complete);
+                        isMealInFavorites = true; // Update the variable
+                    }
+                }
+            }
+        });
+    }
+    public void favSettings(ImageView favIcon){
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        if (firebaseAuth.getCurrentUser() != null) {
+            DatabaseReference usersRef = FirebaseDatabase.getInstance().getReference("Users")
+                    .child(Objects.requireNonNull(firebaseAuth.getUid())).child("Favorites");
+            String mealId = curr_meal.getIdMeal();
+            Query query = usersRef.orderByKey().equalTo(mealId);
+
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        isMealInFavorites = true;
+                        favIcon.setImageResource(R.drawable.ic_favorite_complete);
+                    } else {
+                        isMealInFavorites = false;
+                        favIcon.setImageResource(R.drawable.ic_favorite_border);
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Handle error
+                    Log.d("Debug","Database error");
+                }
+            });
+        }
     }
 
     private void setupActionBar() {
         setSupportActionBar(toolbar);
-        collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.white));
-        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.colorPrimary));
-        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.white));
+        collapsingToolbarLayout.setContentScrimColor(getResources().getColor(R.color.white,
+                getApplicationContext().getTheme()));
+        collapsingToolbarLayout.setCollapsedTitleTextColor(getResources().getColor(R.color.colorPrimary,
+                getApplicationContext().getTheme()));
+        collapsingToolbarLayout.setExpandedTitleColor(getResources().getColor(R.color.white,
+                getApplicationContext().getTheme()));
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
     }
 
-    void setupColorActionBarIcon(final Drawable favoriteItemColor) {
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if ((collapsingToolbarLayout.getHeight() + verticalOffset) < (2 * ViewCompat.getMinimumHeight(collapsingToolbarLayout))) {
-                    if (toolbar.getNavigationIcon() != null)
-                        toolbar.getNavigationIcon().setColorFilter(DetailActivity.this.getResources().getColor(R.color.colorPrimary,getApplicationContext().getTheme()), PorterDuff.Mode.SRC_ATOP);
-                    favoriteItemColor.mutate().setColorFilter(DetailActivity.this.getResources().getColor(R.color.colorPrimary,
-                                    getApplicationContext().getTheme()),
-                            PorterDuff.Mode.SRC_ATOP);
-
-                } else {
-                    if (toolbar.getNavigationIcon() != null)
-                        toolbar.getNavigationIcon().setColorFilter(DetailActivity.this.getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
-                    favoriteItemColor.mutate().setColorFilter(DetailActivity.this.getResources().getColor(R.color.white),
-                            PorterDuff.Mode.SRC_ATOP);
-                }
-            }
-        });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.bottom_nav_menu, menu);
-        MenuItem favoriteItem = menu.findItem(R.id.favorite);
-        Drawable favoriteItemColor = favoriteItem.getIcon();
-        setupColorActionBarIcon(favoriteItemColor);
-        return true;
-    }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home :
-                onBackPressed();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if(item.getItemId()== android.R.id.home) {
+            onBackPressed();
+            return true;
         }
+        else
+            return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -140,14 +180,24 @@ public class DetailActivity extends AppCompatActivity implements DetailView{
 
     @Override
     public void setMeal(Meals.Meal meal) {
+        curr_meal=meal;
+        if(curr_meal==null) {
+            Log.e("e", "curr_error");
+        }
+        if(this.curr_meal==null) {
+            Log.e("e", "this error");
+        }
+        if(meal==null) {
+            Log.e("e", "error");
+        }
+        favSettings(favIcon);
+        assert meal != null;
         Picasso.get().load(meal.getStrMealThumb()).into(mealThumb);
         collapsingToolbarLayout.setTitle(meal.getStrMeal());
         category.setText(meal.getStrCategory());
         country.setText(meal.getStrArea());
         instructions.setText(meal.getStrInstructions());
         setupActionBar();
-
-        //===
 
         if (!meal.getStrIngredient1().isEmpty()) {
             ingredients.append("\n \u2022 " + meal.getStrIngredient1());
@@ -270,8 +320,6 @@ public class DetailActivity extends AppCompatActivity implements DetailView{
         if (!meal.getStrMeasure20().isEmpty() && !Character.isWhitespace(meal.getStrMeasure20().charAt(0))) {
             measures.append("\n : " + meal.getStrMeasure20());
         }
-
-
         youtube.setOnClickListener(v -> {
             Intent intentYoutube = new Intent(Intent.ACTION_VIEW);
             intentYoutube.setData(Uri.parse(meal.getStrYoutube()));
@@ -288,5 +336,60 @@ public class DetailActivity extends AppCompatActivity implements DetailView{
     @Override
     public void onErrorLoading(String message) {
         Utils.showDialogMessage(this, "Error", message);
+    }
+
+    public static void addToFav(Context context, Meals.Meal meal){
+
+        FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+        if(firebaseAuth.getCurrentUser()==null){
+            Toast.makeText(context, "You are not logged in", Toast.LENGTH_SHORT).show();
+        }
+        else{
+
+            DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference("Users");
+            String mealId = meal.getIdMeal();
+            HashMap<String, Object> mealMap = new HashMap<>();
+            mealMap.put(mealId, meal); // Convert the meal to a HashMap
+            databaseReference.child(Objects.requireNonNull(firebaseAuth.getUid())).child("Favorites")
+                    .updateChildren(mealMap)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(context, "Added to favorites", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(Exception e) {
+                            Toast.makeText(context, "Error - "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+    public static void removeFromFav(Context context, Meals.Meal meal){
+
+        FirebaseAuth firebaseAuth=FirebaseAuth.getInstance();
+        if(firebaseAuth.getCurrentUser()==null){
+            Toast.makeText(context, "You are not logged in", Toast.LENGTH_SHORT).show();
+        }
+        else {
+
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Users");
+            String mealId = meal.getIdMeal();
+            databaseReference.child(Objects.requireNonNull(firebaseAuth.getUid())).child("Favorites").child(mealId)
+                    .removeValue()
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            Toast.makeText(context, "Removed from favorites", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(Exception e) {
+                            Toast.makeText(context, "Error - " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
     }
 }

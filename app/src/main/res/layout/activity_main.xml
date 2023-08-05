@@ -2,9 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
     <androidx.appcompat.widget.Toolbar
@@ -12,11 +12,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:background="?attr/colorAccent"
+        android:background="@color/light_green"
         android:elevation="4dp"
+        android:textStyle="bold|italic"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:titleTextColor="@color/dark_blue"
         app:layout_constraintTop_toTopOf="parent"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         tools:layout_editor_absoluteX="16dp">
@@ -29,32 +29,36 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        tools:layout_editor_absoluteX="-16dp" >
+        tools:layout_editor_absoluteX="-16dp">
+
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:fillViewport="true"
-            android:background="@color/colorBackground">
+            android:background="@color/light_green">
+
             <RelativeLayout
                 android:id="@+id/header_view"
                 android:layout_width="match_parent"
                 android:layout_height="300dp">
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="220dp"
-                    android:background="?attr/colorAccent"/>
+                    android:background="@color/dark_blue" />
+
                 <TextView
                     android:id="@+id/title"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/redressed"
+                    android:padding="4sp"
+                    android:text="@string/discover"
                     android:textColor="@color/colorCardPrimary"
                     android:textSize="25sp"
-                    android:text="@string/search"
-                    android:textStyle="bold"
-                    android:layout_marginHorizontal="15dp"
-                    android:layout_marginTop="20dp"
-                    android:padding="4sp"
-                    android:fontFamily="@font/redressed"/>
+                    android:textStyle="bold" />
+
                 <androidx.cardview.widget.CardView
                     android:id="@+id/card_search"
                     android:layout_width="match_parent"
@@ -65,25 +69,28 @@
                     app:cardBackgroundColor="@color/colorCardPrimary"
                     app:cardCornerRadius="5dp"
                     app:cardElevation="0dp">
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="50dp"
+                        android:drawableStart="@drawable/ic_baseline_search_24"
+                        android:drawablePadding="10dp"
+                        android:gravity="center_vertical"
                         android:padding="10dp"
                         android:text="@string/search"
-                        android:textColor="@color/colorCardBottomText"
-                        android:gravity="center_vertical"
-                        android:drawableLeft="@drawable/ic_baseline_search_24"
-                        android:drawablePadding="10dp"/>
+                        android:textColor="@color/colorCardBottomText" />
                 </androidx.cardview.widget.CardView>
+
                 <androidx.viewpager.widget.ViewPager
                     android:id="@+id/view_pager_header"
                     android:layout_width="match_parent"
                     android:layout_height="150dp"
-                    android:foregroundGravity="center"
-                    android:clipToPadding="false"
                     android:layout_below="@+id/card_search"
                     android:layout_marginTop="10dp"
+                    android:clipToPadding="false"
+                    android:foregroundGravity="center"
                     android:overScrollMode="never">
+
                     <include
                         android:id="@+id/shimmer_meal"
                         layout="@layout/item_view_pager_header_shimmer" />
@@ -91,44 +98,44 @@
 
                 <TextView
                     android:id="@+id/title_category"
-                    android:text="@string/meal_category"
-                    android:textSize="19sp"
-                    android:textColor="@color/black"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginTop="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/view_pager_header"/>
+                    android:layout_below="@id/view_pager_header"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="16dp"
+                    android:text="@string/meal_category"
+                    android:textColor="@color/black"
+                    android:textSize="19sp"
+                    android:textStyle="bold" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_category"
-                    android:scrollbars="none"
-                    android:layout_marginTop="10dp"
-                    android:clipToPadding="false"
-                    android:layout_below="@id/title_category"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_below="@id/title_category"
                     android:layout_marginLeft="8dp"
+                    android:layout_marginTop="10dp"
                     android:layout_marginRight="8dp"
-                    android:layout_marginBottom="50dp" />
+                    android:layout_marginBottom="50dp"
+                    android:clipToPadding="false"
+                    android:scrollbars="none" />
 
                 <include
                     android:id="@+id/shimmer_category"
-                    layout="@layout/item_recycler_category_shimmer" />
+                    layout="@layout/item_recycler_category_shimmer"/>
 
                 <TextView
-                    android:padding="10dp"
-                    android:gravity="center"
-                    android:textColor="@color/white"
-                    android:text="@string/app_name"
-                    android:background="@color/teal_700"
-                    android:layout_alignParentBottom="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
                     android:layout_marginTop="20dp"
-                    android:fontFamily="@font/tinos_regular"/>
+                    android:background="@color/dark_blue"
+                    android:fontFamily="@font/tinos_regular"
+                    android:gravity="center"
+                    android:padding="10dp"
+                    android:text="@string/app_name"
+                    android:textColor="@color/white" />
             </RelativeLayout>
         </androidx.core.widget.NestedScrollView>
     </FrameLayout>
@@ -137,9 +144,11 @@
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"
         android:layout_height="75dp"
+        android:background="@color/dark_blue"
+        android:textColor="@color/light_green"
+        app:itemTextColor="@color/light_green"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:menu="@menu/bottom_nav_menu"/>
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

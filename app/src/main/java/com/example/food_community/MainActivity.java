@@ -15,7 +15,7 @@ import com.example.food_community.View.categories.CategoryActivity;
 import com.example.food_community.View.detail.DetailActivity;
 import com.example.food_community.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.FirebaseApp;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -41,11 +41,34 @@ public class MainActivity extends AppCompatActivity implements HomeView{
     HomePresenter presenter;
 
     ActivityMainBinding binding;
-    //BottomNavigationView bottomNavigationView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        FirebaseApp.initializeApp(this);
+        binding=ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.home);
+
+
+        binding.bottomNavigationView.setOnItemSelectedListener(item-> {
+            switch (item.getItemId()){
+                case R.id.favorite:{
+                    Intent intent = new Intent(getApplicationContext(), favorite.class);
+                    startActivity(intent);
+                    break;
+                }
+                case R.id.profile:{
+                    Intent intent = new Intent(getApplicationContext(), profile.class);
+                    startActivity(intent);
+                    break;
+                }
+
+            }
+            return true;
+        });
         ButterKnife.bind(this);
 
         presenter = new HomePresenter(this);
@@ -53,16 +76,6 @@ public class MainActivity extends AppCompatActivity implements HomeView{
         presenter.getCategories();
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
-
-//        binding=ActivityMainBinding.inflate(getLayoutInflater());
-//        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
-//            switch (item.getItemId()){
-//                case androidx.appcompat.R.id.home:
-//                    return true;
-//                default:
-//                    return false;
-//            }
-//        });
 
     }
     @Override
@@ -81,7 +94,6 @@ public class MainActivity extends AppCompatActivity implements HomeView{
     public void setMeal(List<Meals.Meal> meal) {
         ViewPagerHeaderAdapter headerAdapter = new ViewPagerHeaderAdapter(meal, this);
         viewPagerMeal.setAdapter(headerAdapter);
-        viewPagerMeal.setPadding(40, 0, 40, 0);
         headerAdapter.notifyDataSetChanged();
 
         headerAdapter.setOnItemClickListener(new ViewPagerHeaderAdapter.ClickListener() {
@@ -99,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements HomeView{
     public void setCategory(final List<Categories.Category> category) {
         RecyclerViewHomeAdapter homeAdapter = new RecyclerViewHomeAdapter(category, this);
         recyclerViewCategory.setAdapter(homeAdapter);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 3,
+        GridLayoutManager layoutManager = new GridLayoutManager(this, 1,
                 GridLayoutManager.VERTICAL, false);
         recyclerViewCategory.setLayoutManager(layoutManager);
         recyclerViewCategory.setNestedScrollingEnabled(true);
@@ -120,4 +132,12 @@ public class MainActivity extends AppCompatActivity implements HomeView{
     public void onErrorLoading(String message) {
         Utils.showDialogMessage(this, "Title", message);
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        bottomNavigationView.setSelectedItemId(R.id.home);
+    }
+
 }

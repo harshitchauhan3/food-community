@@ -5,13 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    android:background="@color/colorBackground"
+    android:background="@color/light_green"
     tools:context=".View.detail.DetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="240dp"
         android:fitsSystemWindows="true"
         android:theme="@style/AppBarLayoutTheme">
 
@@ -31,12 +31,25 @@
                 android:src="@drawable/shadow_bottom_to_top"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
+
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                <ImageView
+                    android:id="@+id/fav_press"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_favorite_border"
+                    android:padding="2dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginTop="8dp"
+                    android:clickable="true"/>
+            </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
@@ -231,7 +244,7 @@
                 <androidx.cardview.widget.CardView
                     android:layout_weight="1"
                     app:cardUseCompatPadding="true"
-                    app:cardBackgroundColor="#FFE1E1"
+                    app:cardBackgroundColor="#ED2020"
                     app:cardElevation="0dp"
                     app:cardCornerRadius="10dp"
                     android:layout_width="match_parent"
@@ -246,13 +259,13 @@
                         android:text="@string/youtube"
                         android:padding="14dp"
                         android:textSize="16sp"
-                        android:textColor="#EC2D2D"
+                        android:textColor="@color/white"
                         android:gravity="center_vertical"/>
                 </androidx.cardview.widget.CardView>
                 <androidx.cardview.widget.CardView
                     android:layout_weight="1"
                     app:cardUseCompatPadding="true"
-                    app:cardBackgroundColor="#D0FFDB"
+                    app:cardBackgroundColor="@color/dark_blue"
                     app:cardElevation="0dp"
                     app:cardCornerRadius="10dp"
                     android:layout_width="match_parent"
@@ -267,7 +280,7 @@
                         android:text="@string/source"
                         android:padding="14dp"
                         android:textSize="16sp"
-                        android:textColor="#2A7E2F"
+                        android:textColor="@color/light_green"
                         android:gravity="center_vertical"/>
                 </androidx.cardview.widget.CardView>
             </LinearLayout>

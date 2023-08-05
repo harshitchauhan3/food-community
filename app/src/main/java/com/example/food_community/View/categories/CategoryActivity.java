@@ -2,12 +2,13 @@ package com.example.food_community.View.categories;
 
 import static android.nfc.cardemulation.CardEmulation.EXTRA_CATEGORY;
 
+import static com.example.food_community.MainActivity.EXTRA_POSITION;
+
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.food_community.Models.Categories;
 import com.example.food_community.View.Adapter.ViewPagerCategoryAdapter;
-import com.example.food_community.*;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -47,7 +48,7 @@ public class CategoryActivity extends AppCompatActivity {
         Intent intent = getIntent();
         List<Categories.Category> categories =
                 (List<Categories.Category>) intent.getSerializableExtra(EXTRA_CATEGORY);
-        int position = intent.getIntExtra("position", 0);
+        int position = intent.getIntExtra(EXTRA_POSITION, 0);
 
         ViewPagerCategoryAdapter adapter = new ViewPagerCategoryAdapter(
                 getSupportFragmentManager(),
@@ -68,11 +69,7 @@ public class CategoryActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                break;
-        }
+        onBackPressed();
         return true;
     }
 }
